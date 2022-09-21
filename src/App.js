@@ -1,14 +1,13 @@
 import React from 'react';
+import { MathUtils } from 'three';
 
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, GizmoHelper, GizmoViewport } from '@react-three/drei';
+import { OrbitControls} from '@react-three/drei';
 
 import DatGui, { DatColor, DatNumber } from 'react-dat-gui';
 
 import './App.css';
-import "./Components/Box.js";
 import MyRotatingBox from './Components/Box.js';
-import { MathUtils } from 'three';
 
 class App extends React.Component {
   constructor(props) {
@@ -41,10 +40,7 @@ class App extends React.Component {
           camera={{ fov: 75, near: 0.1, far: 1000, position: [15, 10, 15] }}
           shadows={true}
         >
-          <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
-            <GizmoViewport axisColors={['red', 'green', 'blue']} labelColor="black" />
-          </GizmoHelper>
-          <OrbitControls />
+          <OrbitControls minPolarAngle={MathUtils.degToRad(0)} maxPolarAngle={MathUtils.degToRad(85)} />
 
           <ambientLight intensity={0.1} />
           <pointLight color={"cyan"} intensity={data.intensity} distance={30} decay={2} position={[5, data.size * 2, -5]} castShadow />
