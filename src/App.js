@@ -1,25 +1,46 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, ScrollControls, Stars, Stats } from '@react-three/drei';
+import { ScrollControls, Stars, Stats } from '@react-three/drei';
 
 import DatGui, { DatColor, DatFolder, DatNumber } from 'react-dat-gui';
 
 import './App.css';
-import World from './Components/World';
 import { MathUtils } from 'three';
+import Opening from './Components/Opening';
+import Shop from './Components/Shop';
+import Camera from './Components/Camera';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {
-        size: 2,
-        color: "#FFFFFF",
-        // Position
-        phi: 0,
-        theta: 0,
-      }
+        cameraX: -2.5,
+        cameraY: 7,
+        cameraZ: 30,
+        targetX: -2.5,
+        targetY: 15,
+        targetZ: 0,
+        step: 0,
+      },
+      step: 0,
+      states: [
+        {
+          camera: 
+          {
+            position: [-2.5, 7, 30],
+            target: [-2.5, 15, 0]
+          }
+        },
+        {
+          camera: 
+          {
+            position: [0, 115, 30],
+            target: [0, 100, 0]
+          }
+        },
+      ]
     };
   }
 
@@ -30,43 +51,43 @@ class App extends React.Component {
   }
 
   render() {
-    const { data } = this.state;
+    const { data, states, step } = this.state;
     
     return (
       <div id="canvas-main">
         <Stats />
         <DatGui data={data} onUpdate={this.handleUpdate}>
-          <DatNumber path='size' label='Cube Size' min={1} max={10} step={1} />
-          <DatColor path='color' label='Cube Color' />
-          <DatFolder label='Position'>
-            <DatNumber path='phi' label='Phi' min={MathUtils.degToRad(-45)} max={MathUtils.degToRad(45)} step={MathUtils.degToRad(1)} />
-            <DatNumber path='theta' label='Theta' min={MathUtils.degToRad(0)} max={MathUtils.degToRad(360)} step={MathUtils.degToRad(10)} />
+          <DatFolder title="Position">
+            <DatNumber path="cameraX" label='Camera X' min={-1000} max={1000} step={0.5} />
+            <DatNumber path="cameraY" label='Camera Y' min={-1000} max={1000} step={0.5} />
+            <DatNumber path="cameraZ" label='Camera Z' min={-1000} max={1000} step={0.5} />
           </DatFolder>
+          <DatFolder title="Target">
+            <DatNumber path="targetX" label='Target X' min={-1000} max={1000} step={0.5} />
+            <DatNumber path="targetY" label='Target Y' min={-1000} max={1000} step={0.5} />
+            <DatNumber path="targetZ" label='Target Z' min={-1000} max={1000} step={0.5} />
+          </DatFolder>
+          <DatNumber path="step" label='Step' min={0} max={1} step={1} />
         </DatGui>
         <Canvas 
-          onCreated={
-            ({ camera }, state) => {
-              camera.lookAt(0, 10, 0); 
-              camera.updateProjectionMatrix();
-              console.log(state)
-            }
-          }
-          camera={{ fov: 75, near: 0.1, far: 10000, position: [20, 5, 0] }}
           shadows={true}
         >
-          <OrbitControls minPolarAngle={MathUtils.degToRad(0)} maxPolarAngle={MathUtils.degToRad(85)} />
+          <Camera states={states} data={data} />
 
           <color attach={"background"} args={["black"]} />
-          <Stars />
+          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
 
-          <ambientLight intensity={0.1} />
+          <ambientLight intensity={0.3} />
 
-          <pointLight color={"cyan"} intensity={data.intensity} distance={30} decay={2} position={[5, data.size * 2, -5]} castShadow />
-          <pointLight color={"magenta"} intensity={data.intensity} distance={30} decay={2} position={[-5, data.size * 2, -5]} castShadow />
-          <pointLight color={"yellow"} intensity={data.intensity} distance={30} decay={2} position={[-5, data.size * 2, 5]} castShadow />
+          <pointLight color={"cyan"} intensity={1} distance={30} decay={2} position={[5, 5, -5]} castShadow />
+          <pointLight color={"magenta"} intensity={1} distance={30} decay={2} position={[-5, 5, -5]} castShadow />
+          <pointLight color={"yellow"} intensity={1} distance={30} decay={2} position={[-5, 5, 5]} castShadow />
           
           {/* <ScrollControls pages={10}> */}
-            <World data={data}/>
+          <Suspense fallback={null}>
+            <Opening />
+            <Shop />
+          </Suspense>
           {/* </ScrollControls> */}
         </Canvas>
       </div>

@@ -13,7 +13,7 @@ const MyRotatingBox = ({ data: { size, color, phi, theta }, radius }) => {
   const spring = useSpring({ 
     scale: active ? 1.5 : 1,
     color: hover ? "red" : color,
-    config: config.wobbly,
+    config: config.slow,
   });
 
   useFrame(({ clock }) => {
