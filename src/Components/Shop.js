@@ -2,7 +2,7 @@ import { useGLTF, useHelper } from '@react-three/drei';
 import React, { useRef } from 'react';
 import { MathUtils, PointLightHelper } from 'three';
 
-const Shop = () => {
+const Shop = ({ position }) => {
 
   const shop = useGLTF("/Models/Shop/scene.gltf");
 
@@ -10,7 +10,7 @@ const Shop = () => {
   useHelper(potion, PointLightHelper, 1, "cyan");
 
   return(
-    <group position={[0, 100, 10]}>
+    <group position={position}>
       <primitive 
         object={shop.scene} 
         scale={[5, 5, 5]}
