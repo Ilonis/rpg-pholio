@@ -9,8 +9,8 @@ const SceneManager = () => {
   return (
     <Suspense fallback={null}>
       <Opening />
-      <Shop position={[0, -h * 1.3, 10]}/>
-      <Tower position={[0, -h * 2.5, -10]} />
+      <Shop position={[w * 1.25, -h * 0.1, 10]}/>
+      <Tower position={[w * 2.5, 0, -10]} />
     </Suspense>
   )
 }
