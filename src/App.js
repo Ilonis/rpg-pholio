@@ -85,12 +85,12 @@ class App extends React.Component {
             damping={3}
             horizontal
           >
-            <MenuManager />
+            {/* <MenuManager /> */}
             <Scroll>
               <SceneManager />
             </Scroll>
             <Scroll html>
-              <ContentManager />
+              {/* <ContentManager /> */}
               <svg>
                 <filter id="wavy2">
                   <feTurbulence x="0" y="0" baseFrequency="0.02" numOctaves="5" seed="1" />
